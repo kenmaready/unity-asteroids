@@ -12,7 +12,7 @@ public class UICanvas : MonoBehaviour
     [SerializeField] private Button _playButton;
 
     private string _mainText = "Asteroids";
-    private string scoreFormat = "0000000000";
+    private string scoreFormat = "00000000";
     private GameManager gm;
 
     private void Awake() {
@@ -54,7 +54,7 @@ public class UICanvas : MonoBehaviour
 
     public void UpdateLivesRemainingDisplay(int livesRemaining) {
         for (int i = 0; i < _livesRemainingSprites.Length; i++) {
-            if (i >= livesRemaining) {
+            if (i > livesRemaining) {
                 _livesRemainingSprites[i].enabled = false;
             } else {
                 _livesRemainingSprites[i].enabled = true;
@@ -64,5 +64,9 @@ public class UICanvas : MonoBehaviour
 
     public void OnPlayButtonClick() {
         gm.Play();
+    }
+
+    public void OnQuitButtonClick() {
+        gm.Quit();
     }
 }

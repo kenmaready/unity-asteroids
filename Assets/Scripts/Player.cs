@@ -26,6 +26,8 @@ public class Player : MonoBehaviour {
         if (gm == null) {
             Debug.LogError("No GameManager Object could be found by Player.");
         }
+
+        DisplayMode();
     }
 
     private void Update() {
@@ -107,6 +109,12 @@ public class Player : MonoBehaviour {
         }
 
         this.gameObject.layer = LayerMask.NameToLayer("Player");
+    }
+
+    public void DisplayMode() {
+        _frozen = true;
+        this.gameObject.layer = LayerMask.NameToLayer("SafeRespawn");
+
     }
 
 }

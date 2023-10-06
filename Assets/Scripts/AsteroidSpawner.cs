@@ -26,4 +26,10 @@ public class AsteroidSpawner : MonoBehaviour
             asteroid.Launch(rotation * -spawnDirection);
         }
     }
+
+    public void ClearAsteroidField() {
+        foreach (Asteroid asteroid in FindObjectsOfType<Asteroid>()) {
+            Destroy(asteroid.gameObject);
+        }
+    }
 }
