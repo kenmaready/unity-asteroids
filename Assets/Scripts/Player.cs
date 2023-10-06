@@ -6,6 +6,8 @@ public class Player : MonoBehaviour {
     [SerializeField] private Bullet bulletPrefab;
     [SerializeField] ParticleSystem explosion;
 
+    private GameManager gm;
+
     private Rigidbody2D _rigidbody;
     private BulletSpawnPoint _bulletSpawnPoint;
     private float thrustSpeed = 2.0f;
@@ -17,6 +19,11 @@ public class Player : MonoBehaviour {
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
         _bulletSpawnPoint = GetComponentInChildren<BulletSpawnPoint>();
+
+        gm = FindObjectOfType<GameManager>();
+        if (gm == null) {
+            Debug.LogError("No GameManager Object could be found by Player.");
+        }
     }
 
     private void Update() {
@@ -53,7 +60,7 @@ public class Player : MonoBehaviour {
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Asteroid") {
             FreezeControls();
-            Explode();
+            StartCoroutine(PlayerDeathSequence());
         }
     }
 
@@ -62,17 +69,12 @@ public class Player : MonoBehaviour {
         _frozen = true;
     }
 
-    private void Explode() {
-        StartCoroutine(FlashRed());
+    private IEnumerator PlayerDeathSequence() {
         Instantiate(this.explosion, this.transform.position, Quaternion.identity);
-        Destroy(this.gameObject, 4.0f);
-    }
-
-    private IEnumerator FlashRed() {
         SpriteRenderer renderer = this.GetComponent<SpriteRenderer>();
         renderer.color = Color.red;
 
-        while (true) {
+        for (int i = 0; i < 8; i++) {
             yield return new WaitForSeconds(0.25f);
             renderer.color = Color.white;
 
@@ -80,6 +82,14 @@ public class Player : MonoBehaviour {
             renderer.color = Color.red;
         }
 
+        renderer.color = Color.white;
+        gm.OnPlayerDeath();
+    }
+
+    public void Respawn() {
+        this.transform.position = new Vector3(0,0,0);
+        this.transform.eulerAngles = Vector3.up;
+        _frozen = false;
     }
 
 }
