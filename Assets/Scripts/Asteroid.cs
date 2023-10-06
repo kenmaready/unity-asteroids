@@ -33,7 +33,7 @@ public class Asteroid : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Bullet" || other.gameObject.tag == "Player") {
-            if ((this.size * 0.5) >= this.minSize) {
+            if ((this.size * 0.5) >= (this.minSize * 0.66)) {
                 SplitAsteroid();
             }
 
@@ -44,7 +44,7 @@ public class Asteroid : MonoBehaviour
     private void SplitAsteroid() {
         for (int i = 0; i < 2; i++) {
             Vector3 position = this.transform.position;
-            position += (Vector3)Random.insideUnitCircle * 0.4f;
+            position += (Vector3)Random.insideUnitCircle * 5f;
 
             float variance = Random.Range(-10.0f, 10.0f);
             Quaternion rotation = Quaternion.AngleAxis(variance, Vector3.forward);
@@ -52,7 +52,7 @@ public class Asteroid : MonoBehaviour
             Asteroid newAsteroid = Instantiate(this, this.transform.position, this.transform.rotation);
             newAsteroid.size = this.size * 0.5f;
 
-            newAsteroid.Launch(rotation * this.transform.eulerAngles);
+            newAsteroid.Launch(Random.insideUnitCircle.normalized * this.speed);
         }
     }
 
