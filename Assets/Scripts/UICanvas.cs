@@ -5,9 +5,13 @@ using TMPro;
 public class UICanvas : MonoBehaviour
 {
     
+    [SerializeField] private TextMeshProUGUI _mainTextDisplay;
     [SerializeField] private TextMeshProUGUI _scoreDisplay;
     [SerializeField] private GameObject _livesRemainingDisplay;
     [SerializeField] private Image[] _livesRemainingSprites;
+    [SerializeField] private Button _playButton;
+
+    private string _mainText = "Asteroids";
     private string scoreFormat = "0000000000";
     private GameManager gm;
 
@@ -18,8 +22,30 @@ public class UICanvas : MonoBehaviour
 
     void Start()
     {
+        _mainTextDisplay.text = _mainText;
+        _mainTextDisplay.gameObject.SetActive(true);
+        _playButton.GetComponentInChildren<TextMeshProUGUI>().text = "Play";
+        _playButton.gameObject.SetActive(true);
+    }
+
+    public void StartPlay() {
+        UpdateDisplaysForNewGame();
+    }
+
+    private void UpdateDisplaysForNewGame() {
+        _mainTextDisplay.gameObject.SetActive(false);
+        _playButton.gameObject.SetActive(false);
         _scoreDisplay.text = 0.ToString(scoreFormat);
+        _playButton.gameObject.SetActive(false);
         UpdateLivesRemainingDisplay(gm.LivesRemaining);
+    }
+
+    public void OnGameOver() {
+        _mainText = "Game Over";
+        _mainTextDisplay.text = _mainText;
+        _mainTextDisplay.gameObject.SetActive(true);
+        _playButton.GetComponentInChildren<TextMeshProUGUI>().text = "Play Again";
+        _playButton.gameObject.SetActive(true);
     }
 
     public void UpdateScore(int score) {
@@ -34,5 +60,9 @@ public class UICanvas : MonoBehaviour
                 _livesRemainingSprites[i].enabled = true;
             }
         }
+    }
+
+    public void OnPlayButtonClick() {
+        gm.Play();
     }
 }

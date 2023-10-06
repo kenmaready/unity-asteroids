@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour
 
     public void IncreaseScore(int val) {
         score += val;
-        Debug.Log("Score is now: " + score);
         uiCanvas.UpdateScore(score);
     }
 
@@ -39,8 +38,15 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    private void GameOver() {
+    public void Play() {
+        livesRemaining = startingLives;
+        score = 0;
+        uiCanvas.StartPlay();
+        RespawnPlayer();
+    }
 
+    private void GameOver() {
+        uiCanvas.OnGameOver();
     }
 
     private void RespawnPlayer() {
