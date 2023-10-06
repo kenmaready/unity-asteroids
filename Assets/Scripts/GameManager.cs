@@ -7,6 +7,8 @@ public class GameManager : MonoBehaviour
     private int startingLives = 3;
 
     private int currentLives;
+    private int score;
+    [SerializeField] UICanvas uiCanvas;
 
     private void Awake() {
         player = FindObjectOfType<Player>();
@@ -17,6 +19,12 @@ public class GameManager : MonoBehaviour
 
     private void Start() {
         this.currentLives = this.startingLives;
+    }
+
+    public void IncreaseScore(int val) {
+        score += val;
+        Debug.Log("Score is now: " + score);
+        uiCanvas.UpdateScore(score);
     }
 
     public void OnPlayerDeath() {

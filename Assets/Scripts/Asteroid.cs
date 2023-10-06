@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Asteroid : MonoBehaviour
 {
-
+    private GameManager gm;
     [SerializeField] private Sprite[] sprites;
     [SerializeField] private ParticleSystem asteroidExplosion;
     private SpriteRenderer _spriteRenderer;
@@ -15,7 +15,23 @@ public class Asteroid : MonoBehaviour
     public float speed = 3.5f;
     public float maxLifetime = 40.0f;
 
+    private int ScoreValue { get {
+        switch(size) {
+            case var _ when size < 0.5:
+                return 400;
+            case var _ when size < 0.8:
+                return 300;
+            case var _ when size < 1.1:
+                return 200;
+            case var _ when size < 1.4:
+                return 100;
+            default:
+                return 50;
+        }
+    }}
+
     private void Awake() {
+        gm = FindObjectOfType<GameManager>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _rigidbody = GetComponent<Rigidbody2D>();
     }
@@ -34,7 +50,9 @@ public class Asteroid : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Bullet" || other.gameObject.tag == "Player") {
-            Instantiate(this.asteroidExplosion, other.GetContact(0).point, Quaternion.identity);
+            ParticleSystem explosion = Instantiate(this.asteroidExplosion, other.GetContact(0).point, Quaternion.identity);
+            Destroy(explosion, 0.5f);
+            gm.IncreaseScore(ScoreValue);
             if ((this.size * 0.5) >= (this.minSize * 0.66)) {
                 SplitAsteroid();
             }
