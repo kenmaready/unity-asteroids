@@ -6,6 +6,7 @@ public class Asteroid : MonoBehaviour
 {
 
     [SerializeField] private Sprite[] sprites;
+    [SerializeField] private ParticleSystem asteroidExplosion;
     private SpriteRenderer _spriteRenderer;
     private Rigidbody2D _rigidbody;
     public float size = 1.0f;
@@ -33,6 +34,7 @@ public class Asteroid : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D other) {
         if (other.gameObject.tag == "Bullet" || other.gameObject.tag == "Player") {
+            Instantiate(this.asteroidExplosion, other.GetContact(0).point, Quaternion.identity);
             if ((this.size * 0.5) >= (this.minSize * 0.66)) {
                 SplitAsteroid();
             }

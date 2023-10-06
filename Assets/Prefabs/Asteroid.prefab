@@ -176,6 +176,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 50d5b24e1f63640e39d8f882c7b7de2b, type: 3}
   - {fileID: 21300000, guid: 50c87e49e1c734513be494829c314ff9, type: 3}
   - {fileID: 21300000, guid: bb9d844c9700c48e4995ff1878f5a0d4, type: 3}
+  asteroidExplosion: {fileID: 3355310547464510587, guid: 3248637b0adbe4505ab2a7f26a898f53, type: 3}
   size: 1
   minSize: 0.5
   maxSize: 1.5

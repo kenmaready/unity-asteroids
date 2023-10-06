@@ -1,10 +1,11 @@
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Player : MonoBehaviour {
 
     [SerializeField] private Bullet bulletPrefab;
-    [SerializeField] ParticleSystem explosion;
+    private ParticleSystem explosion;
 
     private GameManager gm;
 
@@ -19,6 +20,7 @@ public class Player : MonoBehaviour {
     private void Awake() {
         _rigidbody = GetComponent<Rigidbody2D>();
         _bulletSpawnPoint = GetComponentInChildren<BulletSpawnPoint>();
+        explosion = GetComponentInChildren<ParticleSystem>();
 
         gm = FindObjectOfType<GameManager>();
         if (gm == null) {
@@ -70,7 +72,7 @@ public class Player : MonoBehaviour {
     }
 
     private IEnumerator PlayerDeathSequence() {
-        Instantiate(this.explosion, this.transform.position, Quaternion.identity);
+        explosion.Play();
         SpriteRenderer renderer = this.GetComponent<SpriteRenderer>();
         renderer.color = Color.red;
 
@@ -87,13 +89,13 @@ public class Player : MonoBehaviour {
     }
 
     public void Respawn() {
-        StartCoroutine(SafeRespawnRoutine());
+        StartCoroutine(SafeRespawnSequence());
         this.transform.position = Vector3.zero;
         this.transform.eulerAngles = Vector3.up;
         _frozen = false;
     }
 
-    private IEnumerator SafeRespawnRoutine() {
+    private IEnumerator SafeRespawnSequence() {
         SpriteRenderer renderer = this.GetComponent<SpriteRenderer>();
 
         for (int i = 0; i < 6; i++) {
