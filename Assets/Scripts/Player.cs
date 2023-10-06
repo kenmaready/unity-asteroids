@@ -87,9 +87,24 @@ public class Player : MonoBehaviour {
     }
 
     public void Respawn() {
-        this.transform.position = new Vector3(0,0,0);
+        StartCoroutine(SafeRespawnRoutine());
+        this.transform.position = Vector3.zero;
         this.transform.eulerAngles = Vector3.up;
         _frozen = false;
+    }
+
+    private IEnumerator SafeRespawnRoutine() {
+        SpriteRenderer renderer = this.GetComponent<SpriteRenderer>();
+
+        for (int i = 0; i < 6; i++) {
+            renderer.color = Color.gray;
+            yield return new WaitForSeconds(0.25f);
+            
+            renderer.color = Color.white;
+            yield return new WaitForSeconds(0.25f);
+        }
+
+        this.gameObject.layer = LayerMask.NameToLayer("Player");
     }
 
 }

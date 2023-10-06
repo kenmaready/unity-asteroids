@@ -34,6 +34,7 @@ public class GameManager : MonoBehaviour
     }
 
     private void RespawnPlayer() {
+        this.player.gameObject.layer = LayerMask.NameToLayer("SafeRespawn");
         this.player.gameObject.SetActive(true);
         this.player.Respawn();
     }
